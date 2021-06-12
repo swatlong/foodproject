@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Registration</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <h1>Success! Welcome, {{ user.first_name }} {{ user.last_name }}!</h1>
+
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+
+    <a class="btn btn-primary" href="/logout">Log Out</a>
+
+
+    <a class="btn btn-primary"  href="/home">Home</a>
+
+    <h1>New Food</h1>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form action="post_food" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="origin_food">origin_food</label>
+            <input type="text" name="origin_food" id="origin_food" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="appetizer">appetizer</label>
+            <input type="text" name="appetizer" id="appetizer" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="main_course">main_course</label>
+            <input type="text" name="main_course" id="main_course" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="dessert">dessert</label>
+            <input name="dessert" name="dessert" id="dessert" class="form-control" required>
+        </div>
+        <button class="btn btn-primary">Submit</button>
+    </form>
+
+
+</body>
+</html>

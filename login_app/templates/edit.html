@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/home">Home</a> 
+    <h1>Edit Food</h1>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <form action="/food/{{ food.id }}/update" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="origin_food">origin_food</label>
+            <input type="text" name="origin_food" id="origin_food" class="form-control" value="{{ food.origin_food}}" required>
+        </div>
+        <div class="form-group">
+            <label for="appetizer">appetizer</label>
+            <input type="text" name="appetizer" id="appetizer" class="form-control" value="{{ food.appetizer}}" required>
+        </div>
+        <div class="form-group">
+            <label for="main_course">main_course</label>
+            <input type="text" name="main_course" id="main_course" class="form-control" value="{{ food.main_course}}" required>
+        </div>
+        <div class="form-group">
+            <label for="dessert">dessert</label>
+            <input type="text" name="dessert" id="dessert" class="form-control" value="{{ food.dessert}}" required>
+        </div>
+        <button class="btn btn-primary">Submit</button>
+    </form>
+</body>
+</html>

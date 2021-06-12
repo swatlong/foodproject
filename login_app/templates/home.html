@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Registration</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <h1>Welcome, {{ user.first_name }} {{ user.last_name }}!</h1>
+
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+
+    <a class="btn btn-primary" href="/logout">Log Out</a>
+
+    <h1>What are we eating today?</h1>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form action="/post" method="POST">
+    {% csrf_token %}
+    <textarea class="form-control" name="content" rows="3" for="post" required></textarea>
+    <button class="btn btn-primary">Post</button>
+    </form>
+
+    <div class="container">
+        <div class="col">
+            {% for post in posts reversed %}
+            <div class="post">
+                <div class="bg-light">
+                    <p> {{ post.content }}</p>
+                    posted by {{ post.posted_by.first_name }}
+                    <a href="/remove-post/{{post.id}}">Delete</a>
+                    <a href="/like/{{post.id}}">Like Post</a>
+                    <p>{{ post.user_likes.count }}</p>
+                </div>
+                <div class="comment">
+                    <form action="/post-comment/{{ post.id }}" method="post" required>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Add Comment</label>
+                        <input type="text" name="comment" class="form-control" required>
+                    </div>
+                    <button class="btn btn-primary">Comment</button>
+                    </form>
+
+                    {% for comment in post.comments.all reversed %}
+
+                    {{ comment.comment }}, comment by: {{ comment.user.first_name }} 
+                    <a href="/delete/{{comment.id}}">Delete</a>
+                    <a href="/like-comment/{{post.id}}">Like Comment</a>
+                    <p>{{ post.comment_likes.count }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    
+    <h1>All Foods</h1>
+    <table class="table table-dark table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>origin_food</th>
+                <th>appetizer</th>
+                <th>main_course</th>
+                <th>dessert</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for food in all_food %}
+            <tr>
+                <td>{{ food.id }}</td>
+                <td>{{ food.origin_food }}</td>
+                <td>{{ food.appetizer }}</td>
+                <td>{{ food.main_course }}</td>
+                <td>{{ food.dessert }}</td>
+                <td><a class="btn btn-primary" href="/food/{{ food.id }}/edit">Edit</a>  <a class="btn btn-primary"  href="/food/{{ food.id }}/delete">Delete</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <a  class="btn btn-primary"  href="/food">Add a new food!</a>
+    </table>
+</body>
+</html>
